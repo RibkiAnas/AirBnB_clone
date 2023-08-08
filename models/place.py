@@ -1,7 +1,10 @@
+#!/usr/bin/python3
+"""Defines the Place class."""
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
+    """Represents a Place class"""
     city_id = ""
     user_id = ""
     name = ""

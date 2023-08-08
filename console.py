@@ -1,15 +1,21 @@
 #!/usr/bin/python3
-
+"""Defines the HBNB console."""
 import cmd
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 
 
 class HBNBCommand(cmd.Cmd):
+    """Defines the command interpreter."""
 
     prompt = "(hbnb) "
 
     def do_create(self, arg):
+        """Create a new instance of BaseModel, save it and print the id
+
+        Args:
+            arg: contains the name of the class and id to be created
+        """
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
@@ -21,6 +27,11 @@ class HBNBCommand(cmd.Cmd):
             print(obj.id)
 
     def do_show(self, arg):
+        """Print the string representation of an instance based on the class name and id
+
+        Args:
+            arg: contains the class name and id to be printed
+        """
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
