@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines the HBNB console."""
 import cmd
+import re
 from models.base_model import BaseModel
 from models import storage
 from models.state import State
@@ -33,7 +34,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             obj = self.__classes[args[0]]()
             print(obj.id)
-            obj.save()
+            storage.save()
 
     def do_show(self, arg):
         """Print the string representation of an instance based
@@ -85,15 +86,18 @@ class HBNBCommand(cmd.Cmd):
             arg: contains the class name to be printed
         """
         args = arg.split()
+        objs = []
         if len(args) == 0:
             for value in storage.all().values():
-                print(value)
+                objs.append(value.__str__())
         elif args[0] not in self.__classes.keys():
             print("** class doesn't exist **")
+            return True
         else:
             for key, value in storage.all().items():
                 if key.startswith(args[0]):
-                    print(value)
+                    objs.append(value.__str__())
+        print(objs)
 
     def do_update(self, arg):
         """Update an instance based on the class name and id
@@ -119,8 +123,47 @@ class HBNBCommand(cmd.Cmd):
                 print("** value missing **")
             else:
                 obj = storage.all()[key]
-                setattr(obj, args[2], eval(args[3]))
+                val = args[3]
+                if '"' in val:
+                    try:
+                        i = 4
+                        while True:
+                            val += " " + args[i]
+                            i += 1
+                    except IndexError:
+                        val = val.replace('"', "")
+                setattr(obj, args[2], val)
                 obj.save()
+
+    def default(self, line):
+        """default command for handling <class name>.(actions)"""
+        do_actions = {
+            "all": self.do_all,
+            "count": self.do_count,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update
+        }
+        match = re.search(r"\.", line)
+        if match is not None:
+            line_ = [line[:match.span()[0]], line[match.span()[1]:]]
+            match = re.search(r"\(.*?\)", line_[1])
+            if match is not None:
+                command = [line_[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in do_actions.keys():
+                    arg = "{} {}".format(line_[0], command[1])
+                    do_actions[command[0]](arg)
+            else:
+                print("*** Unknown syntax: {}".format(line))
+
+    def do_count(self, arg):
+        """<class name>.count() Countes models"""
+        args = arg.split()
+        count = 0
+        for obj in storage.all().values():
+            if args[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
 
     def emptyline(self):
         """repeats line on receiving empty line"""
