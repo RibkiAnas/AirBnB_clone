@@ -51,7 +51,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            key = args[0] + "." + args[1]
+            key = args[0] + "." + args[1].replace('"', "")
             if key not in storage.all():
                 print("** no instance found **")
             else:
@@ -71,8 +71,8 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            key = args[0] + "." + args[1]
-            if key not in storage.all():
+            key = args[0] + "." + args[1].replace('"', "")
+            if key not in storage.all().keys():
                 print("** no instance found **")
             else:
                 del storage.all()[key]
