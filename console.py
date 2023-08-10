@@ -113,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
                 objs.append(value.__str__())
         elif args[0] not in self.__classes.keys():
             print("** class doesn't exist **")
-            return True
+            return False
         else:
             for val in storage.all().values():
                 if args[0] == val.__class__.__name__:
@@ -194,11 +194,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, sta):
         """Quit command to exit the program"""
-        exit()
+        return True
 
     def do_EOF(self, sta):
         """EOF end of file to exit"""
-        exit()
+        return True
 
 
 if __name__ == '__main__':
