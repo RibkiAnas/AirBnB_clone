@@ -2,6 +2,7 @@
 """Defines the HBNB console."""
 import cmd
 import re
+from shlex import split
 from models.base_model import BaseModel
 from models import storage
 from models.state import State
@@ -10,6 +11,26 @@ from models.user import User
 from models.review import Review
 from models.place import Place
 from models.amenity import Amenity
+
+
+def spliter(arg):
+    """Spliter For spliting the arg"""
+
+    curly_braces = re.search(r"\{(.*?)\}", arg)
+    brackets = re.search(r"\[(.*?)\]", arg)
+    if curly_braces is None:
+        if brackets is None:
+            return [i.strip(",") for i in split(arg)]
+        else:
+            lexer = split(arg[:brackets.span()[0]])
+            retl = [i.strip(",") for i in lexer]
+            retl.append(brackets.group())
+            return retl
+    else:
+        lexer = split(arg[:curly_braces.span()[0]])
+        retl = [i.strip(",") for i in lexer]
+        retl.append(curly_braces.group())
+        return retl
 
 
 class HBNBCommand(cmd.Cmd):
@@ -26,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg: contains the name of the class and id to be created
         """
-        args = arg.split()
+        args = spliter(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classes.keys():
@@ -48,7 +69,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg: contains the class name and id to be printed
         """
-        args = arg.split()
+        args = spliter(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classes.keys():
@@ -56,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            key = args[0] + "." + args[1].replace('"', "")
+            key = args[0] + "." + args[1]
             if key not in storage.all():
                 print("** no instance found **")
             else:
@@ -74,7 +95,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg: contains the class name and id to be deleted
         """
-        args = arg.split()
+        args = spliter(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classes.keys():
@@ -82,7 +103,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             print("** instance id missing **")
         else:
-            key = args[0] + "." + args[1].replace('"', "")
+            key = args[0] + "." + args[1]
             if key not in storage.all().keys():
                 print("** no instance found **")
             else:
@@ -102,18 +123,18 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg: contains the class name to be printed
         """
-        args = arg.split()
+        args = spliter(arg)
         objs = []
         if len(args) == 0:
             for value in storage.all().values():
                 objs.append(value.__str__())
         elif args[0] not in self.__classes.keys():
             print("** class doesn't exist **")
-            return True
+            return False
         else:
-            for key, value in storage.all().items():
-                if key.startswith(args[0]):
-                    objs.append(value.__str__())
+            for val in storage.all().values():
+                if args[0] == val.__class__.__name__:
+                    objs.append(val.__str__())
         print(objs)
 
     def help_all(self):
@@ -128,7 +149,7 @@ class HBNBCommand(cmd.Cmd):
         Args:
             arg (): contains the class name and id to be updated
         """
-        args = arg.split()
+        args = spliter(arg)
         if len(args) == 0:
             print("** class name missing **")
         elif args[0] not in self.__classes.keys():
@@ -137,25 +158,27 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             key = args[0] + "." + args[1]
-            if key not in storage.all():
+            if key not in storage.all().keys():
                 print("** no instance found **")
             elif len(args) == 2:
                 print("** attribute name missing **")
             elif len(args) == 3:
-                print("** value missing **")
+                try:
+                    type(eval(args[2])) != dict
+                    obj = storage.all()[key]
+                    for k, v in eval(args[2]).items():
+                        if k in obj.__class__.__dict__.keys():
+                            val = type(obj.__class__.__dict__[k])
+                            obj.__dict__[k] = val(v)
+                        else:
+                            obj.__dict__[k] = v
+                    storage.save()
+                except NameError:
+                    print("** value missing **")
             else:
                 obj = storage.all()[key]
-                val = args[3]
-                if '"' in val:
-                    try:
-                        i = 4
-                        while True:
-                            val += " " + args[i]
-                            i += 1
-                    except IndexError:
-                        val = val.replace('"', "")
-                setattr(obj, args[2], val)
-                obj.save()
+                setattr(obj, args[2], args[3])
+                storage.save()
 
     def help_update(self):
         """ Help information for the update class """
@@ -187,7 +210,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, arg):
         """<class name>.count() Countes models"""
-        args = arg.split()
+        args = spliter(arg)
         count = 0
         for obj in storage.all().values():
             if args[0] == obj.__class__.__name__:
@@ -205,11 +228,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, sta):
         """Quit command to exit the program"""
-        exit()
+        return True
 
     def do_EOF(self, sta):
         """EOF end of file to exit"""
-        exit()
+        return True
 
 
 if __name__ == '__main__':
