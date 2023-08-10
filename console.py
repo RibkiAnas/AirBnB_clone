@@ -36,6 +36,11 @@ class HBNBCommand(cmd.Cmd):
             print(obj.id)
             storage.save()
 
+    def help_create(self):
+        """ Help information for the create method """
+        print("Creates a class of any type")
+        print("[Usage]: create <className>\n")
+
     def do_show(self, arg):
         """Print the string representation of an instance based
            on the class name and id
@@ -56,6 +61,12 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 print(storage.all()[key])
+
+    def help_show(self):
+        """ Help information for the show command """
+        print("Shows an individual instance of a class")
+        print("[Usage]: show <className> <objectId>\
+              or <class name>.show(<id>)\n")
 
     def do_destroy(self, arg):
         """Delete an instance based on the class name and id
@@ -78,6 +89,12 @@ class HBNBCommand(cmd.Cmd):
                 del storage.all()[key]
                 storage.save()
 
+    def help_destroy(self):
+        """ Help information for the destroy command """
+        print("Destroys an individual instance of a class")
+        print("[Usage]: destroy <className> <objectId> " +
+              "or <class name>.destroy(<id>)\n")
+
     def do_all(self, arg):
         """Print all string representation of all instances
            based or not on the class name
@@ -98,6 +115,11 @@ class HBNBCommand(cmd.Cmd):
                 if key.startswith(args[0]):
                     objs.append(value.__str__())
         print(objs)
+
+    def help_all(self):
+        """ Help information for the all command """
+        print("Shows all objects, or all of a class")
+        print("[Usage]: all <className> or <className>.all()\n")
 
     def do_update(self, arg):
         """Update an instance based on the class name and id
@@ -135,6 +157,13 @@ class HBNBCommand(cmd.Cmd):
                 setattr(obj, args[2], val)
                 obj.save()
 
+    def help_update(self):
+        """ Help information for the update class """
+        print("Updates an object with new information")
+        print("Usage: update <className> <id> <attName> <attVal>" +
+              " or <class name>.update(<id>, <attribute name>," +
+              " <attribute value>)\n")
+
     def default(self, line):
         """default command for handling <class name>.(actions)"""
         do_actions = {
@@ -164,6 +193,11 @@ class HBNBCommand(cmd.Cmd):
             if args[0] == obj.__class__.__name__:
                 count += 1
         print(count)
+
+    def help_count(self):
+        """ Help information for the count command """
+        print("Count all objects of a class")
+        print("[Usage]: count <className> or <className>.count()\n")
 
     def emptyline(self):
         """repeats line on receiving empty line"""
