@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img src="https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20230807%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230807T103714Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=d6b352d1b4b54c96308e7dfdbf014e8d9738170e2cb469fc50efaee4184558a9" alt="Project logo"></a>
+ <img src="https://camo.githubusercontent.com/59589bd21e8ec09ef94f2d9bb80d36d144bc487fe4737f8b213d005f3273921b/68747470733a2f2f696d6775722e636f6d2f4f696c457358562e706e67" alt="Project logo"></a>
 </p>
 <h3 align="center">0x00. AirBnB clone - The console</h3>
 
@@ -81,4 +81,37 @@
 [BaseModel] (77ds6d-ajdj-902df-bb34b-93009dj) {'id': '77ds6d-ajdj-902df-bb34b-93009dj', 'created_at': datetime.datetime(2023, 8, 7, 14, 33, 45, 729889),
 'updated_at': datetime.datetime(2023, 8, 7, 14, 33, 45, 729907), 'first_name': 'anas'}
 (hbnb)
+```
+
+#### Variant Syntax
+
+###### 1. Show all User Objects
+
+```
+(hbnb) User.all()
+["[User] (8c66555f-28d7-4ae7-9156-f9299a9eb7e4) {'id': '8c66555f-28d7-4ae7-9156-f9299a9eb7e4', 'created_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 703677), 'updated_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 703687), 'first_name': 'Anas', 'last_name': 'Bar', 'email': 'airbnb6@mail.com', 'password': 'root'}", "[User] (1a816bcf-614a-4b3c-8310-92a24407a241) {'id': '1a816bcf-614a-4b3c-8310-92a24407a241', 'created_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704372), 'updated_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704393), 'first_name': 'John', 'email': 'airbnb2@mail.com', 'password': 'root'}"]
+```
+
+###### 2. Destroy a User
+
+```
+(hbnb) User.destroy(8c66555f-28d7-4ae7-9156-f9299a9eb7e4)
+(hbnb) User.all()
+["[User] (1a816bcf-614a-4b3c-8310-92a24407a241) {'id': '1a816bcf-614a-4b3c-8310-92a24407a241', 'created_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704372), 'updated_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704393), 'first_name': 'John', 'email': 'airbnb2@mail.com', 'password': 'root'}"]
+```
+
+###### 3. Update a User by attributes
+
+```
+(hbnb) User.update("1a816bcf-614a-4b3c-8310-92a24407a241", "first_name", "Anas")
+(hbnb) User.all()
+["[User] (1a816bcf-614a-4b3c-8310-92a24407a241) {'id': '1a816bcf-614a-4b3c-8310-92a24407a241', 'created_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704372), 'updated_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704393), 'first_name': 'Anas', 'email': 'airbnb2@mail.com', 'password': 'root'}"]
+```
+
+###### 3. Update a User by dictionary
+
+```
+(hbnb) User.update("1a816bcf-614a-4b3c-8310-92a24407a241", {'email': 'example@mail.com'})
+(hbnb) User.all()
+["[User] (1a816bcf-614a-4b3c-8310-92a24407a241) {'id': '1a816bcf-614a-4b3c-8310-92a24407a241', 'created_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704372), 'updated_at': datetime.datetime(2023, 8, 10, 15, 57, 55, 704393), 'first_name': 'Anas', 'email': 'example@mail.com', 'password': 'root'}"]
 ```

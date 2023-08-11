@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 """State Model Unit tests"""
-
-
 import unittest
 from models.base_model import BaseModel
 from models.state import State
