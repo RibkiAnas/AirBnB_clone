@@ -48,3 +48,4 @@ class BaseModel:
         tdict["__class__"] = self.__class__.__name__
 
         return tdict
+
