@@ -6,7 +6,7 @@ from models.base_model import BaseModel
 
 
 class TestFileStorage(unittest.TestCase):
-    """Test"""
+    """Test normal base instantiation"""
 
     def test_file_storage(self):
         """Test FileStorage"""
