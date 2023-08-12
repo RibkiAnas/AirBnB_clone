@@ -11,8 +11,7 @@ from time import sleep
 class Test_Class_BaseModel(unittest.TestCase):
     """Testing BaseModel class"""
 
-    @mock.patch('models.storage')
-    def test_BaseModel_instance(self, mock_storage):
+    def test_BaseModel_instance(self):
         """
         Test BaseModel attributes
         """
@@ -87,8 +86,7 @@ class Test_Class_BaseModel(unittest.TestCase):
                                                      instance6.__dict__)
         self.assertEqual(string_output, str(instance6))
 
-    @mock.patch('models.storage')
-    def test_save_method(self, mock_storage):
+    def test_save_method(self):
         """Testing save method"""
 
         instance = BaseModel()
@@ -101,7 +99,11 @@ class Test_Class_BaseModel(unittest.TestCase):
         updated_inst = instance.updated_at
         self.assertNotEqual(updated_ats, updated_inst)
         self.assertEqual(created_ats, saved_inst)
-        self.assertTrue(mock_storage.save.called)
+
+        instance.save()
+        bmid = "BaseModel." + instance.id
+        with open("file.json", "r") as f:
+            self.assertIn(bmid, f.read())
 
 
 if __name__ == '__main__':
