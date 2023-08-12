@@ -10,7 +10,7 @@ import models
 
 class BaseModel:
     """
-    BaseModel class
+    BaseModel class for all other classes
     """
 
     def __init__(self, *args, **kwargs):
