@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch, Mock, MagicMock
 from io import StringIO
 from console import HBNBCommand
+from models import storage
 
 
 class TestHBNBCommand(unittest.TestCase):
@@ -31,6 +32,17 @@ class TestHBNBCommand(unittest.TestCase):
             self.console.onecmd("create BaseModel")
             obj_id = f.getvalue().strip()
             self.assertIsNotNone(obj_id)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.console.onecmd("create City name='Marrakech'")
+            obj_id = f.getvalue().strip()
+            self.assertIsNotNone(obj_id)
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertIn('City.{}'.format(obj_id), storage.all().keys())
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.console.onecmd("show City {}".format(obj_id))
 
     def test_show(self):
         """Test case for the show command"""
