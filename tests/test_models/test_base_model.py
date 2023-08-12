@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """BaseModel Unittests"""
+
+
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
@@ -39,7 +41,6 @@ class TestBase(unittest.TestCase):
 
         base = BaseModel()
         base.save()
-
         self.assertNotEqual(base.created_at, base.updated_at)
 
 
