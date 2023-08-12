@@ -80,6 +80,13 @@ class Test_Class_BaseModel(unittest.TestCase):
         self.assertNotEqual(instance1.id, instance3.id)
         self.assertNotEqual(instance2.id, instance3.id)
 
+    def test_str_method(self):
+        """Testing returns STR method"""
+        instance6 = BaseModel()
+        string_output = "[BaseModel] ({}) {}".format(instance6.id,
+                                                     instance6.__dict__)
+        self.assertEqual(string_output, str(instance6))
+
     @mock.patch('models.storage')
     def test_save_method(self, mock_storage):
         """Testing save method"""
