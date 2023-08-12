@@ -16,9 +16,6 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """The BaseModel init method"""
 
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
         if kwargs:
             for k, v in kwargs.items():
                 if k == "created_at" or k == "updated_at":
@@ -26,6 +23,9 @@ class BaseModel:
                 if k != "__class__":
                     setattr(self, k, v)
         else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             models.storage.new(self)
 
     def __str__(self):
