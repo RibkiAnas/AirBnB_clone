@@ -44,6 +44,41 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd("show City {}".format(obj_id))
 
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create BaseModel")
+            testKey = "BaseModel.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create User")
+            testKey = "User.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create State")
+            testKey = "State.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create City")
+            testKey = "City.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create Amenity")
+            testKey = "Amenity.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create Place")
+            testKey = "Place.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.console.onecmd("create Review")
+            testKey = "Review.{}".format(f.getvalue().strip())
+            self.assertIn(testKey, storage.all().keys())
+
     def test_show(self):
         """Test case for the show command"""
         with patch('sys.stdout', new=StringIO()) as f:
@@ -57,6 +92,10 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd("show BaseModel")
             self.assertEqual(f.getvalue().strip(), "** instance id missing **")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.console.onecmd("show BaseModel 551af")
+            self.assertEqual(f.getvalue().strip(), "** no instance found **")
 
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd("create BaseModel")
@@ -83,10 +122,12 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd("create BaseModel")
             obj_id = f.getvalue().strip()
+            obj = storage.all()["BaseModel.{}".format(obj_id)]
 
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd(f"destroy BaseModel {obj_id}")
             self.assertEqual(f.getvalue().strip(), "")
+            self.assertNotIn(obj, storage.all())
 
     def test_all(self):
         """Test case for the all command"""
@@ -127,6 +168,11 @@ class TestHBNBCommand(unittest.TestCase):
 
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd(f"update BaseModel {obj_id} my_attr 'value'")
+            self.assertEqual(f.getvalue().strip(), "")
+
+        with patch('sys.stdout', new=StringIO()) as f:
+            dict_ = {"name": "ye", "number": 5}
+            self.console.onecmd(f"update BaseModel {obj_id} {dict_}")
             self.assertEqual(f.getvalue().strip(), "")
 
     def test_default(self):
