@@ -5,6 +5,7 @@
 	border: solid 1px #dddddd;
 	border-radius: 4px;
 	display: flex;
+	align-items: center;
 }
 
 .filters button {
@@ -20,4 +21,31 @@
 
 .filters button:hover {
 	opacity: 90%;
+}
+
+.filters .locations {
+	position: relative;
+	height: 100%;
+	width: 25%;
+	border-right: solid 1px #dddddd;
+	margin-left: 40px;
+}
+
+.filters h3 {
+	position: absolute;
+	font-weight: 600;
+}
+
+.filters h4 {
+	font-weight: 400;
+	font-size: 14px;
+	position: absolute;
+	top: 20%;
+}
+
+.filters .amenities {
+	position: relative;
+	height: 100%;
+	width: 25%;
+	margin-left: 40px;
 }
