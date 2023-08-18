@@ -55,6 +55,7 @@
 	padding: 0px 0px 25px 0px;
 	list-style: none;
 	display: none;
+	z-index: 10;
 }
 
 .filters .locations .popover > li h2 {
@@ -104,6 +105,7 @@
 	padding: 25px 0px 25px 40px;
 	list-style: none;
 	display: none;
+	z-index: 10;
 }
 
 .amenities:hover > .popover {
